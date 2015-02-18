@@ -16,6 +16,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var filteredSuggestedSearchFoods:[String] = []
     var scopeButtonTitles = ["Recommended", "Search Results", "Saved"]
     
+    let kAppId = "4a577e9b"
+    let kAppKey = "8f5faf9a3c92b00d8782abc621190bc7"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -42,6 +45,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
     
+    // UITableViewDataSource
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if self.searchController.active {
             return self.filteredSuggestedSearchFoods.count
@@ -64,6 +69,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
 
+    // UISearchResultUpdating
+    
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         let searchString = self.searchController.searchBar.text
         let selectedScopeButtonIndex = self.searchController.searchBar.selectedScopeButtonIndex
@@ -76,6 +83,63 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             var foodMatch = food.rangeOfString(searchText)
             return foodMatch != nil
         })
+    }
+    
+    // UISearchBarDelegate
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        makeRequest(searchBar.text)
+    }
+    
+    
+    func makeRequest (searchString : String) {
+        
+    // How to make a GET Request
+//        var url = NSURL(string: "https://api.nutritionix.com/v1_1/search/\(searchString)?results=0%3A20&cal_min=0&cal_max=50000&fields=item_name%2Cbrand_name%2Citem_id%2Cbrand_id&appId=\(kAppId)&appKey=\(kAppKey)")
+//        let task = NSURLSession.sharedSession().dataTaskWithURL(url!) { (data, response, error) -> Void in
+//            var stringData = NSString(data: data, encoding: NSUTF8StringEncoding)
+//            println(stringData)
+//            println(response)
+//        }
+//        task.resume()
+        
+        
+//        var request = NSMutableURLRequest(URL: NSURL(string: "https://api.nutritionix.com/v1_1/search/")!)
+//        let session = NSURLSession.sharedSession()
+//        request.HTTPMethod = "POST"
+//        var params = [
+//            "appId" : kAppId,
+//            "appKey" : kAppKey,
+//            "fields" : ["item_name", "brand_name", "keywords", "usda_fields"],
+//            "limit"  : "50",
+//            "query"  : searchString,
+//            "filters": ["exists":["usda_fields": true]]]
+//        var error: NSError?
+//        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(params, options: nil, error: &error)
+//        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+//        request.addValue("application/json", forHTTPHeaderField: "Accept")
+//        
+//        var task = session.dataTaskWithRequest(request, completionHandler: { (data, response, err) -> Void in
+//            var stringData = NSString(data: data, encoding: NSUTF8StringEncoding)
+//            println(stringData)
+//            var conversionError: NSError?
+//            var jsonDictionary = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableLeaves, error: &conversionError) as? NSDictionary
+//            println(jsonDictionary)
+//        })
+//        task.resume()
+        
+        var request = NSMutableURLRequest(URL: NSURL(string: "https://api.nutritionix.com/v1_1/search/")!)
+        let session = NSURLSession.sharedSession()
+        request.HTTPMethod = "POST"
+        var params = [
+                    "appId" : kAppId,
+                    "appKey" : kAppKey,
+                    "fields" : ["item_name", "brand_name", "keywords", "usda_fields"],
+                    "limit"  : "50",
+                    "query"  : searchString,
+                    "filters": ["exists":["usda_fields": true]]]
+        var error: NSError?
+        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(<#obj: AnyObject#>, options: <#NSJSONWritingOptions#>, error: <#NSErrorPointer#>)
     }
 
 }
