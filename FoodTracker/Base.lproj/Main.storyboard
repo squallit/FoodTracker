@@ -46,7 +46,7 @@
                     <navigationItem key="navigationItem" id="qxW-09-0Cg"/>
                     <connections>
                         <outlet property="tableView" destination="tup-pu-iP9" id="0Yr-6Z-0UQ"/>
-                        <segue destination="rcI-BN-OXL" kind="show" identifier="Cell" id="qLe-7S-llQ"/>
+                        <segue destination="rcI-BN-OXL" kind="show" identifier="toDetailVCSegue" id="qLe-7S-llQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

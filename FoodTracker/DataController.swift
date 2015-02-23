@@ -10,7 +10,10 @@ import Foundation
 import CoreData
 import UIKit
 
+
+let kUSDAItemCompleted = "USDAItemInstanceComplete"
 class DataController {
+    
     
     class func jsonAsUSDAIdAndNameSearchResults (json : NSDictionary) -> [(name: String, idValue: String)] {
         var usdaItemsSearchResults:[(name : String, idValue: String)] = []
@@ -48,11 +51,14 @@ class DataController {
                     let predicate = NSPredicate(format: "idValue == %@", itemDictionaryId)
                     requestForUSDAItem.predicate = predicate
                     var error: NSError?
-                    var items = managedObjectContext?.executeFetchRequest(requestForUSDAItem, error: &error)
+                    var items = managedObjectContext?.executeFetchRequest(requestForUSDAItem, error: &error) as? [USDAItem]
                     // end of prepare to be checked
                     
                     if items?.count != 0 {
                         println("This item is already saved!")
+                        
+//                        let usdaItem = items[0] as USDAItem
+//                        NSNotificationCenter.defaultCenter().postNotificationName(kUSDAItemCompleted, object: usdaItem)
                         return
                     }
                     else {
@@ -67,7 +73,7 @@ class DataController {
                             if fieldsDictionary["item_name"] != nil {
                                 usdaItem.name = fieldsDictionary["item_name"]! as String
                             }
-                        
+                            
                             if fieldsDictionary["usda_fields"] != nil {
                                 let usdaFieldsDictionary = fieldsDictionary["usda_fields"]! as NSDictionary
                                 
@@ -162,12 +168,15 @@ class DataController {
                                 else {
                                     usdaItem.energy = "0"
                                 }
-                        
+                                
+                                (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+                                NSNotificationCenter.defaultCenter().postNotificationName(kUSDAItemCompleted, object: usdaItem)
+                                
                             }
-                        
-                        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
-                        
+                            
+                            
                         }
+                        
                     }
                 }
             }
